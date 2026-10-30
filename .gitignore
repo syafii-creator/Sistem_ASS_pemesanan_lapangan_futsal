@@ -20,6 +20,7 @@ yarn-error.log
 /scratch
 *.tmp
 test_*.php
+/storage/prototype_html_backup
 /storage/logs/*.log
 /storage/framework/cache/data/*
 /storage/framework/sessions/*
