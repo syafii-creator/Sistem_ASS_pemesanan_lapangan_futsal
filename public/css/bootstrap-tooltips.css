@@ -1,0 +1,172 @@
+/* ========================================================================= */
+/* BOOTSTRAP 5 TOOLTIPS STYLING & GLOSSARY HELPER                           */
+/* ========================================================================= */
+
+.tooltip {
+  position: absolute;
+  z-index: 9999999;
+  display: block;
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: left;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  letter-spacing: normal;
+  word-break: normal;
+  white-space: normal;
+  word-spacing: normal;
+  line-break: auto;
+  font-size: 0.75rem;
+  word-wrap: break-word;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.tooltip.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tooltip-inner {
+  max-width: 320px;
+  min-width: 140px;
+  padding: 0.65rem 0.95rem;
+  color: #f8fafc;
+  text-align: center;
+  font-size: 0.74rem;
+  line-height: 1.5;
+  background-color: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.85rem;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.7), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.tooltip .tooltip-arrow {
+  position: absolute;
+  display: block;
+  width: 0.8rem;
+  height: 0.4rem;
+}
+
+.tooltip .tooltip-arrow::before {
+  position: absolute;
+  content: "";
+  border-color: transparent;
+  border-style: solid;
+}
+
+.bs-tooltip-top .tooltip-arrow,
+.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow {
+  bottom: 0;
+}
+
+.bs-tooltip-top .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+  top: -1px;
+  border-width: 0.4rem 0.4rem 0;
+  border-top-color: #090d16;
+}
+
+.bs-tooltip-bottom .tooltip-arrow,
+.bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow {
+  top: 0;
+}
+
+.bs-tooltip-bottom .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="bottom"] .tooltip-arrow::before {
+  bottom: -1px;
+  border-width: 0 0.4rem 0.4rem;
+  border-bottom-color: #090d16;
+}
+
+.bs-tooltip-start .tooltip-arrow,
+.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow {
+  right: 0;
+  width: 0.4rem;
+  height: 0.8rem;
+}
+
+.bs-tooltip-start .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="left"] .tooltip-arrow::before {
+  left: -1px;
+  border-width: 0.4rem 0 0.4rem 0.4rem;
+  border-left-color: #090d16;
+}
+
+.bs-tooltip-end .tooltip-arrow,
+.bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow {
+  left: 0;
+  width: 0.4rem;
+  height: 0.8rem;
+}
+
+.bs-tooltip-end .tooltip-arrow::before,
+.bs-tooltip-auto[data-popper-placement^="right"] .tooltip-arrow::before {
+  right: -1px;
+  border-width: 0.4rem 0.4rem 0.4rem 0;
+  border-right-color: #090d16;
+}
+
+/* Helper Class untuk Istilah Teknis yang Diberi Penjelasan Tooltip */
+.term-tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  position: relative;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(148, 163, 184, 0.7);
+  text-underline-offset: 3px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.term-tooltip *,
+.cursor-help,
+[data-bs-toggle="tooltip"] {
+  cursor: pointer;
+}
+
+.term-tooltip:hover,
+.term-tooltip.tooltip-pinned {
+  text-decoration-color: #10b981;
+  color: #10b981;
+}
+
+.dark .term-tooltip:hover,
+.dark .term-tooltip.tooltip-pinned {
+  text-decoration-color: #34d399;
+  color: #34d399;
+}
+
+.term-badge-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background-color: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+  font-size: 9px;
+  font-weight: 700;
+  margin-left: 3px;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.term-badge-info:hover,
+.term-badge-info.tooltip-pinned {
+  background-color: rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}

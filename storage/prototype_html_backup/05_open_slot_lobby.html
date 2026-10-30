@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Slot (Mabar) Lobby & Room - LapanganKita</title>
+  <meta name="description" content="Cari teman main futsal acak, buat room mabar patungan sewa lapangan, dan nikmati sistem auto refund aman jika kuota tidak terpenuhi.">
+
+  <!-- Anti-Flicker Theme Init Script -->
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('lapangankita_theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-nav {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(30, 41, 59, 0.8);
+    }
+    html:not(.dark) .glass-nav {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black transition-colors duration-300">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 glass-nav transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="01_landing_page.html" class="flex items-center gap-2.5 group shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+          <i data-lucide="trophy" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+            Lapangan<span class="text-emerald-500">Kita</span>
+          </span>
+          <span class="hidden sm:block text-[10px] text-slate-400 font-semibold -mt-1 tracking-wider uppercase">OPEN SLOT MABAR</span>
+        </div>
+      </a>
+
+      <!-- Menu Navigasi Tengah -->
+      <nav class="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+        <a href="01_landing_page.html" class="hover:text-emerald-500 transition-colors">Beranda</a>
+        <a href="03_katalog_venue.html" class="hover:text-emerald-500 transition-colors">Katalog Venue</a>
+        <a href="05_open_slot_lobby.html" class="text-emerald-500 font-bold border-b-2 border-emerald-500 pb-0.5">Open Slot (Mabar)</a>
+        <a href="06_lobby_sparing.html" class="hover:text-emerald-500 transition-colors">Lobby Sparing</a>
+      </nav>
+
+      <!-- Aksi Kanan -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <button onclick="handleThemeToggle()" id="themeToggleBtn" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center gap-1.5 text-xs font-semibold transition-colors">
+          <i id="themeIcon" data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
+          <span class="hidden lg:inline" id="themeText">Terang</span>
+        </button>
+
+        <button onclick="openCreateRoomModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span>Buat Room Mabar</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO BANNER INFORMASI MABAR -->
+  <section class="bg-gradient-to-b from-emerald-500/10 via-slate-100/30 dark:from-emerald-950/20 dark:via-slate-950 border-b border-slate-200 dark:border-slate-800/80 pt-8 pb-6 px-4">
+    <div class="max-w-7xl mx-auto space-y-4">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold mb-2">
+            <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Fitur Patungan Aman & Anti Rugi</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Lobby Open Slot <span class="text-emerald-500">Mabar Futsal</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+            Kurang orang buat sewa lapangan? Gabung room mabar di bawah atau buat room kamu sendiri. Bayar patungan via QRIS, dan dana otomatis <strong>100% di-refund</strong> jika kuota belum penuh H-2 jam sebelum main!
+          </p>
+        </div>
+
+        <!-- Quick Stats Banner -->
+        <div class="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm shrink-0">
+          <div class="text-center px-3">
+            <div class="text-lg font-black text-emerald-500" id="statActiveRooms">6</div>
+            <div class="text-[10px] text-slate-400 font-semibold">Room Aktif</div>
+          </div>
+          <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+          <div class="text-center px-3">
+            <div class="text-lg font-black text-slate-900 dark:text-white" id="statAvailableSlots">18</div>
+            <div class="text-[10px] text-slate-400 font-semibold">Slot Kosong</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold pt-2">
+        <span class="text-slate-400 text-[11px] shrink-0 font-medium mr-1">Filter Kategori:</span>
+        <button onclick="setFilter('all')" class="filter-pill px-3 py-1.5 rounded-xl bg-emerald-600 text-white shrink-0 font-bold shadow-sm" data-filter="all">Semua Mabar</button>
+        <button onclick="setFilter('fun')" class="filter-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0" data-filter="fun">Fun & Santai</button>
+        <button onclick="setFilter('competitive')" class="filter-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0" data-filter="competitive">Kompetitif / Semi-Pro</button>
+        <button onclick="setFilter('almostFull')" class="filter-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0" data-filter="almostFull">🔥 Hampir Penuh (1-2 Slot)</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- LIST ROOM MABAR GRID                                                      -->
+  <!-- ========================================================================= -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
+    <div id="roomsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Di-render dinamis oleh JS -->
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL BUAT ROOM MABAR BARU                                                -->
+  <!-- ========================================================================= -->
+  <div id="createRoomModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-lg w-full rounded-3xl p-6 sm:p-7 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      
+      <button onclick="closeCreateRoomModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+          <i data-lucide="users" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Buka Room Mabar Baru</h3>
+          <p class="text-xs text-slate-500">Ajak pemain lain patungan sewa lapangan.</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleCreateRoomSubmit(event)" class="space-y-3.5 pt-2">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Judul Room Mabar</label>
+          <input type="text" id="inputRoomTitle" required placeholder="Contoh: Mabar Santai Komunitas IT Bandung" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih Venue</label>
+            <select id="inputRoomVenue" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Champion Futsal Arena (Bandung)">Champion Futsal Arena (Bandung)</option>
+              <option value="Garuda Sport Center (Jakarta)">Garuda Sport Center (Jakarta)</option>
+              <option value="Siliwangi Futsal Stadium (Surabaya)">Siliwangi Futsal Stadium (Surabaya)</option>
+              <option value="Patriot Futsal Center (Bekasi)">Patriot Futsal Center (Bekasi)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Level Permainan</label>
+            <select id="inputRoomLevel" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Fun & Santai">Fun & Santai (Semua Boleh Gabung)</option>
+              <option value="Kompetitif">Kompetitif / Semi-Pro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Main</label>
+            <input type="date" id="inputRoomDate" required class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Jam Bermain</label>
+            <input type="text" id="inputRoomTime" placeholder="Contoh: 19:00 - 21:00" value="19:00 - 21:00" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Target Kuota Pemain</label>
+            <input type="number" id="inputRoomQuota" min="4" max="20" value="10" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Biaya / Orang (Rp)</label>
+            <input type="number" id="inputRoomPrice" step="5000" value="35000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/40 text-[11px] text-emerald-800 dark:text-emerald-300 flex items-start gap-2">
+          <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5"></i>
+          <span>Anda otomatis terdaftar sebagai pembuat room (Host) dan slot terisi 1 orang.</span>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2">
+          <span>Terbitkan Room Mabar</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL GABUNG MABAR / DETAIL ROOM -->
+  <div id="joinRoomModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-md w-full rounded-3xl p-6 shadow-2xl relative space-y-4">
+      
+      <button onclick="closeJoinModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div>
+        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 uppercase">Konfirmasi Join</span>
+        <h3 class="text-base font-extrabold text-slate-900 dark:text-white mt-2" id="modalJoinTitle">Judul Room</h3>
+        <p class="text-xs text-slate-500 mt-0.5" id="modalJoinVenue">Venue & Jam</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-2 text-xs">
+        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+          <span>Biaya Patungan:</span>
+          <strong class="text-emerald-500 text-sm font-black" id="modalJoinPrice">Rp 35.000</strong>
+        </div>
+        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+          <span>Sisa Slot Kosong:</span>
+          <span class="font-bold text-slate-800 dark:text-slate-200" id="modalJoinSlotsLeft">2 Orang Lagi</span>
+        </div>
+        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+          <span>Metode Pembayaran:</span>
+          <span class="font-semibold text-slate-700 dark:text-slate-300">QRIS Instan / Saldo</span>
+        </div>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <button onclick="confirmJoin()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2">
+          <span>Bayar & Masuk ke Room</span>
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+        </button>
+        <button onclick="closeJoinModal()" class="w-full py-2 text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
+          Batal
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 text-center border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© 2026 LapanganKita. Platform Reservasi Lapangan Futsal & Ekosistem Olahraga.</p>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="01_landing_page.html" class="hover:underline">Beranda</a>
+        <a href="03_katalog_venue.html" class="hover:underline">Katalog</a>
+        <a href="06_lobby_sparing.html" class="hover:underline">Lobby Sparing</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LOAD ENGINE -->
+  <script src="engine.js"></script>
+
+  <!-- OPEN SLOT LOGIC SCRIPT -->
+  <script>
+    lucide.createIcons();
+
+    const OPEN_SLOT_KEY = 'lapangankita_open_slots';
+
+    const defaultRooms = [
+      {
+        id: 'rm-01',
+        title: 'Mabar Malam Santai Komunitas IT',
+        venueName: 'Champion Futsal Arena (Bandung)',
+        date: '2026-10-12',
+        time: '20:00 - 22:00',
+        level: 'Fun & Santai',
+        pricePerPerson: 35000,
+        quota: 10,
+        currentPlayers: 8,
+        hostName: 'Dimas Kurniawan',
+        members: [
+          'Dimas K.', 'Rizky P.', 'Fajar M.', 'Bagas A.', 'Ardianto', 'Ghani', 'Irfan', 'Yoga'
+        ]
+      },
+      {
+        id: 'rm-02',
+        title: 'Latihan Rutin Flank & Pivot',
+        venueName: 'Garuda Sport Center (Jakarta)',
+        date: '2026-10-13',
+        time: '19:00 - 21:00',
+        level: 'Kompetitif',
+        pricePerPerson: 40000,
+        quota: 10,
+        currentPlayers: 9,
+        hostName: 'Coach Aldi',
+        members: [
+          'Aldi', 'Bayu', 'Gilang', 'Tegar', 'Farhan', 'Doni', 'Rian', 'Eko', 'Wahyu'
+        ]
+      },
+      {
+        id: 'rm-03',
+        title: 'Mabar Weekend Minggu Pagi',
+        venueName: 'Siliwangi Futsal Stadium (Surabaya)',
+        date: '2026-10-18',
+        time: '08:00 - 10:00',
+        level: 'Fun & Santai',
+        pricePerPerson: 25000,
+        quota: 12,
+        currentPlayers: 6,
+        hostName: 'Surya Pratama',
+        members: [
+          'Surya P.', 'Rangga', 'Ilham', 'Dito', 'Fian', 'Hafiz'
+        ]
+      },
+      {
+        id: 'rm-04',
+        title: 'Ajang Silaturahmi Alumni Futsal',
+        venueName: 'Patriot Futsal Center (Bekasi)',
+        date: '2026-10-14',
+        time: '20:00 - 22:00',
+        level: 'Fun & Santai',
+        pricePerPerson: 30000,
+        quota: 10,
+        currentPlayers: 7,
+        hostName: 'Hendra Saputra',
+        members: [
+          'Hendra', 'Deni', 'Arif', 'Tomy', 'Ferry', 'Zaki', 'Lukman'
+        ]
+      }
+    ];
+
+    let activeFilter = 'all';
+    let selectedRoomToJoin = null;
+
+    function getRooms() {
+      const stored = localStorage.getItem(OPEN_SLOT_KEY);
+      if (!stored) {
+        localStorage.setItem(OPEN_SLOT_KEY, JSON.stringify(defaultRooms));
+        return defaultRooms;
+      }
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        return defaultRooms;
+      }
+    }
+
+    function saveRooms(data) {
+      localStorage.setItem(OPEN_SLOT_KEY, JSON.stringify(data));
+    }
+
+    // Theme Management
+    function initThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (isDark) {
+        icon.setAttribute('data-lucide', 'sun');
+        text.innerText = 'Terang';
+      } else {
+        icon.setAttribute('data-lucide', 'moon');
+        text.innerText = 'Gelap';
+      }
+      lucide.createIcons();
+    }
+    initThemeUI();
+
+    function handleThemeToggle() {
+      if (window.LapanganKitaTheme) {
+        window.LapanganKitaTheme.toggle();
+      } else {
+        document.documentElement.classList.toggle('dark');
+      }
+      initThemeUI();
+    }
+
+    function setFilter(filter) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        if (btn.getAttribute('data-filter') === filter) {
+          btn.className = 'filter-pill px-3 py-1.5 rounded-xl bg-emerald-600 text-white shrink-0 font-bold shadow-sm';
+        } else {
+          btn.className = 'filter-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0';
+        }
+      });
+      renderRooms();
+    }
+
+    function renderRooms() {
+      const rooms = getRooms();
+      let list = [...rooms];
+
+      if (activeFilter === 'fun') {
+        list = list.filter(r => r.level.includes('Fun'));
+      } else if (activeFilter === 'competitive') {
+        list = list.filter(r => r.level.includes('Kompetitif'));
+      } else if (activeFilter === 'almostFull') {
+        list = list.filter(r => (r.quota - r.currentPlayers) <= 2 && (r.quota - r.currentPlayers) > 0);
+      }
+
+      // Update Quick Stats
+      document.getElementById('statActiveRooms').innerText = rooms.length;
+      let totalSlotsLeft = 0;
+      rooms.forEach(r => totalSlotsLeft += Math.max(0, r.quota - r.currentPlayers));
+      document.getElementById('statAvailableSlots').innerText = totalSlotsLeft;
+
+      const container = document.getElementById('roomsGrid');
+      container.innerHTML = list.map(r => {
+        const slotsLeft = Math.max(0, r.quota - r.currentPlayers);
+        const percent = Math.min(100, Math.round((r.currentPlayers / r.quota) * 100));
+        const isFull = slotsLeft === 0;
+
+        return `
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
+            <div class="space-y-4">
+              
+              <!-- Header Card -->
+              <div class="flex items-start justify-between gap-2">
+                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold ${r.level.includes('Fun') ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-purple-500/10 text-purple-600 dark:text-purple-400'}">
+                  ${r.level}
+                </span>
+
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isFull ? 'bg-rose-500/10 text-rose-500' : (slotsLeft <= 2 ? 'bg-amber-500/10 text-amber-500 animate-pulse' : 'bg-emerald-500/10 text-emerald-500')}">
+                  ${isFull ? 'Room Penuh' : `Sisa ${slotsLeft} Slot`}
+                </span>
+              </div>
+
+              <!-- Judul & Lokasi -->
+              <div>
+                <h3 class="font-bold text-base text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">${r.title}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i>
+                  <span>${r.venueName}</span>
+                </p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+                  <span>${r.date} • <strong>${r.time}</strong></span>
+                </p>
+              </div>
+
+              <!-- Progress Bar Kuota Pemain -->
+              <div class="space-y-1.5">
+                <div class="flex justify-between text-[11px] font-bold">
+                  <span class="text-slate-600 dark:text-slate-400">Kuota Pemain</span>
+                  <span class="text-slate-900 dark:text-white">${r.currentPlayers} / ${r.quota} Orang</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+                </div>
+              </div>
+
+              <!-- List Pemain Bergabung (Avatar Minimalis) -->
+              <div class="flex items-center gap-1 text-[11px] text-slate-500">
+                <i data-lucide="user-check" class="w-3.5 h-3.5 text-emerald-500"></i>
+                <span>Host: <strong>${r.hostName}</strong></span>
+              </div>
+
+            </div>
+
+            <!-- Footer Card: Harga & Tombol Join -->
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 flex items-center justify-between gap-3">
+              <div>
+                <span class="text-[10px] text-slate-400 block font-medium">Patungan / orang</span>
+                <span class="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400">Rp ${Number(r.pricePerPerson).toLocaleString('id-ID')}</span>
+              </div>
+
+              ${isFull ? `
+                <button disabled class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 font-bold text-xs cursor-not-allowed">
+                  Penuh
+                </button>
+              ` : `
+                <button onclick="openJoinModal('${r.id}')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1">
+                  <span>Gabung Mabar</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </button>
+              `}
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // Modal Actions
+    function openCreateRoomModal() {
+      // Set input tanggal ke hari ini
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('inputRoomDate').value = today;
+
+      // Cek draft jika datang dari Halaman 04 Detail Booking
+      const draftRaw = localStorage.getItem('lapangankita_openslot_draft');
+      if (draftRaw) {
+        try {
+          const draft = JSON.parse(draftRaw);
+          document.getElementById('inputRoomTitle').value = `Mabar di ${draft.venueName}`;
+          document.getElementById('inputRoomDate').value = draft.date;
+          document.getElementById('inputRoomTime').value = draft.time;
+          localStorage.removeItem('lapangankita_openslot_draft');
+        } catch(e) {}
+      }
+
+      document.getElementById('createRoomModal').classList.remove('hidden');
+      document.getElementById('createRoomModal').classList.add('flex');
+    }
+
+    function closeCreateRoomModal() {
+      document.getElementById('createRoomModal').classList.add('hidden');
+      document.getElementById('createRoomModal').classList.remove('flex');
+    }
+
+    function handleCreateRoomSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('inputRoomTitle').value;
+      const venue = document.getElementById('inputRoomVenue').value;
+      const level = document.getElementById('inputRoomLevel').value;
+      const date = document.getElementById('inputRoomDate').value;
+      const time = document.getElementById('inputRoomTime').value;
+      const quota = parseInt(document.getElementById('inputRoomQuota').value);
+      const price = parseInt(document.getElementById('inputRoomPrice').value);
+
+      const user = window.LapanganKitaAuth ? window.LapanganKitaAuth.getUser() : null;
+      const hostName = user ? user.name : 'Budi Santoso';
+
+      const newRoom = {
+        id: 'rm-' + Date.now(),
+        title,
+        venueName: venue,
+        date,
+        time,
+        level,
+        pricePerPerson: price,
+        quota,
+        currentPlayers: 1, // Host otomatis masuk
+        hostName,
+        members: [hostName]
+      };
+
+      const rooms = getRooms();
+      rooms.unshift(newRoom);
+      saveRooms(rooms);
+
+      closeCreateRoomModal();
+      renderRooms();
+      alert(`🎉 Room "${title}" berhasil dibuat! Bagikan tautan ini ke teman futsal Anda.`);
+    }
+
+    function openJoinModal(roomId) {
+      const rooms = getRooms();
+      selectedRoomToJoin = rooms.find(r => r.id === roomId);
+      if (!selectedRoomToJoin) return;
+
+      document.getElementById('modalJoinTitle').innerText = selectedRoomToJoin.title;
+      document.getElementById('modalJoinVenue').innerText = `${selectedRoomToJoin.venueName} • ${selectedRoomToJoin.date} (${selectedRoomToJoin.time})`;
+      document.getElementById('modalJoinPrice').innerText = `Rp ${Number(selectedRoomToJoin.pricePerPerson).toLocaleString('id-ID')}`;
+      
+      const slotsLeft = selectedRoomToJoin.quota - selectedRoomToJoin.currentPlayers;
+      document.getElementById('modalJoinSlotsLeft').innerText = `${slotsLeft} Orang Lagi`;
+
+      document.getElementById('joinRoomModal').classList.remove('hidden');
+      document.getElementById('joinRoomModal').classList.add('flex');
+    }
+
+    function closeJoinModal() {
+      document.getElementById('joinRoomModal').classList.add('hidden');
+      document.getElementById('joinRoomModal').classList.remove('flex');
+    }
+
+    function confirmJoin() {
+      if (!selectedRoomToJoin) return;
+
+      const user = window.LapanganKitaAuth ? window.LapanganKitaAuth.getUser() : null;
+      const userName = user ? user.name : 'Pemain Tamu';
+
+      const rooms = getRooms();
+      const target = rooms.find(r => r.id === selectedRoomToJoin.id);
+
+      if (target && target.currentPlayers < target.quota) {
+        target.currentPlayers += 1;
+        if (!target.members) target.members = [];
+        target.members.push(userName);
+        saveRooms(rooms);
+      }
+
+      closeJoinModal();
+      renderRooms();
+      alert(`✅ Selamat! Anda berhasil bergabung ke room "${selectedRoomToJoin.title}". Slot Anda telah dikonfirmasi.`);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Periksa apakah query ?action=create
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('action') === 'create') {
+        openCreateRoomModal();
+      }
+      renderRooms();
+    });
+  </script>
+</body>
+</html>

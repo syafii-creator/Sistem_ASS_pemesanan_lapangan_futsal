@@ -1,0 +1,109 @@
+/* Custom DataTables Styling for LapanganKita (Tailwind Dark & Light Mode Compatible) */
+.dataTables_wrapper {
+  color: inherit !important;
+  font-size: 0.75rem !important;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+  color: #94a3b8 !important;
+  padding: 0.75rem 1rem !important;
+  font-weight: 600 !important;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+  border-radius: 0.75rem !important;
+  padding: 0.4rem 0.75rem !important;
+  color: inherit !important;
+  outline: none !important;
+  margin-left: 0.5rem !important;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important;
+}
+
+.dataTables_wrapper .dataTables_length select {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.25rem 0.5rem !important;
+  color: inherit !important;
+  outline: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 0.5rem !important;
+  border: 1px solid transparent !important;
+  color: inherit !important;
+  padding: 0.35rem 0.75rem !important;
+  font-weight: bold !important;
+  transition: all 0.2s ease !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: #10b981 !important;
+  color: #022c22 !important;
+  border-color: #10b981 !important;
+  font-weight: 800 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.3) !important;
+  color: #10b981 !important;
+}
+
+/* Light Mode Datatables Enhancements */
+html:not(.dark) .dataTables_wrapper .dataTables_length,
+html:not(.dark) .dataTables_wrapper .dataTables_filter,
+html:not(.dark) .dataTables_wrapper .dataTables_info,
+html:not(.dark) .dataTables_wrapper .dataTables_processing,
+html:not(.dark) .dataTables_wrapper .dataTables_paginate {
+  color: #475569 !important;
+}
+
+html:not(.dark) .dataTables_wrapper .dataTables_filter input,
+html:not(.dark) .dataTables_wrapper .dataTables_length select {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+html:not(.dark) .dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: #334155 !important;
+  background-color: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html:not(.dark) .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #047857 !important;
+}
+
+table.dataTable thead th {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+}
+
+table.dataTable.no-footer {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15) !important;
+}
+
+/* Currency formatting right align */
+.text-right,
+.currency-cell {
+  text-align: right !important;
+  font-family: monospace, monospace !important;
+  font-weight: 800 !important;
+}

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Court & Schedule Manager - LapanganKita</title>
+  <meta name="description" content="Kelola unit lapangan futsal, atur tarif sewa per jam normal dan peak hour malam, serta kunci slot manual untuk pesanan walk-in offline.">
+
+  <!-- Anti-Flicker Theme Init Script -->
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('lapangankita_theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-nav {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(30, 41, 59, 0.8);
+    }
+    html:not(.dark) .glass-nav {
+      background: rgba(255, 255, 255, 0.95);
+      border-color: rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black transition-colors duration-300">
+
+  <!-- NAVBAR TENANT ADMIN -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 glass-nav transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between gap-4">
+      
+      <a href="08_tenant_dashboard.html" class="flex items-center gap-2.5 group shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+          <i data-lucide="store" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+            <span>LapanganKita</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20">Manajer Jadwal</span>
+          </span>
+          <span class="hidden sm:block text-[10px] text-slate-400 font-semibold -mt-1 tracking-wider uppercase">UNIT & MATRIKS JADWAL</span>
+        </div>
+      </a>
+
+      <!-- Menu Navigasi Mitra -->
+      <nav class="hidden md:flex items-center gap-5 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+        <a href="08_tenant_dashboard.html" class="hover:text-emerald-500 transition-colors">Ringkasan</a>
+        <a href="09_venue_profile_media.html" class="hover:text-emerald-500 transition-colors">Profil & Galeri</a>
+        <a href="10_court_schedule_manager.html" class="text-emerald-500 font-bold border-b-2 border-emerald-500 pb-0.5">Jadwal & Lapangan</a>
+        <a href="11_ai_business_insights.html" class="hover:text-emerald-500 transition-colors">AI Insights</a>
+        <a href="12_saas_billing.html" class="hover:text-emerald-500 transition-colors">Paket SaaS</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <button onclick="handleThemeToggle()" id="themeToggleBtn" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center gap-1.5 text-xs font-semibold transition-colors">
+          <i id="themeIcon" data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
+          <span class="hidden lg:inline" id="themeText">Terang</span>
+        </button>
+
+        <a href="08_tenant_dashboard.html" class="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">Dashboard</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN SCHEDULING CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
+
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-black text-slate-900 dark:text-white">Pengaturan Lapangan & Jadwal Real-Time</h1>
+        <p class="text-xs text-slate-500 mt-1">Atur harga per jam, kelola unit lapangan, dan kunci slot manual jika ada pemesan offline (walk-in di kasir).</p>
+      </div>
+
+      <button onclick="openAddCourtModal()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+        <span>Tambah Lapangan Baru</span>
+      </button>
+    </div>
+
+    <!-- SECTION 1: UNIT LAPANGAN YANG AKTIF -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Lapangan A Card -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center font-black">
+              A
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-slate-900 dark:text-white">Lapangan A (Rumput Sintetis)</h3>
+              <p class="text-xs text-slate-400">Sintetis Monofilament 50mm Standard FIFA</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500">Aktif</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+            <span class="text-[10px] text-slate-400 block font-semibold uppercase">Tarif Siang (08-17)</span>
+            <span class="text-sm font-extrabold text-slate-900 dark:text-white">Rp 150.000 / jam</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+            <span class="text-[10px] text-amber-500 block font-semibold uppercase">Tarif Malam (18-23)</span>
+            <span class="text-sm font-extrabold text-slate-900 dark:text-white">Rp 180.000 / jam</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lapangan B Card -->
+      <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center font-black">
+              B
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-slate-900 dark:text-white">Lapangan B (Interlock Vinyl)</h3>
+              <p class="text-xs text-slate-400">Vinyl Polypropylene Anti Selip</p>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-500">Aktif</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+            <span class="text-[10px] text-slate-400 block font-semibold uppercase">Tarif Siang (08-17)</span>
+            <span class="text-sm font-extrabold text-slate-900 dark:text-white">Rp 130.000 / jam</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+            <span class="text-[10px] text-amber-500 block font-semibold uppercase">Tarif Malam (18-23)</span>
+            <span class="text-sm font-extrabold text-slate-900 dark:text-white">Rp 160.000 / jam</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECTION 2: MATRIX CONTROLLER & BLOCKING MANUAL -->
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div>
+          <h2 class="text-base font-bold text-slate-900 dark:text-white">Matrix Kunci Slot Manual (Walk-in Booking)</h2>
+          <p class="text-xs text-slate-500">Klik slot untuk mengubah status: Hijau (Tersedia online) ⟷ Abu/Merah (Dibooking offline di tempat).</p>
+        </div>
+
+        <div class="flex items-center gap-3 text-xs font-semibold">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-emerald-500"></span> Online</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-rose-500"></span> Booking Web</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-slate-500"></span> Walk-in Manual</span>
+        </div>
+      </div>
+
+      <!-- Slots Grid for Operator -->
+      <div id="adminSlotsGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+        <!-- Di-render dinamis -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 text-center border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© 2026 LapanganKita. Modul Portal Pengelola Venue Futsal.</p>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="08_tenant_dashboard.html" class="hover:underline">Dashboard</a>
+        <a href="09_venue_profile_media.html" class="hover:underline">Profil</a>
+        <a href="12_saas_billing.html" class="hover:underline">Paket SaaS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LOAD ENGINE -->
+  <script src="engine.js"></script>
+
+  <!-- LOGIC SCRIPT -->
+  <script>
+    lucide.createIcons();
+
+    // Theme Management
+    function initThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (isDark) {
+        icon.setAttribute('data-lucide', 'sun');
+        text.innerText = 'Terang';
+      } else {
+        icon.setAttribute('data-lucide', 'moon');
+        text.innerText = 'Gelap';
+      }
+      lucide.createIcons();
+    }
+    initThemeUI();
+
+    function handleThemeToggle() {
+      if (window.LapanganKitaTheme) {
+        window.LapanganKitaTheme.toggle();
+      } else {
+        document.documentElement.classList.toggle('dark');
+      }
+      initThemeUI();
+    }
+
+    // State Slot Operator
+    const slotHours = [
+      '08:00', '09:00', '10:00', '11:00', '12:00', '13:00',
+      '14:00', '15:00', '16:00', '17:00', '18:00', '19:00',
+      '20:00', '21:00', '22:00', '23:00'
+    ];
+
+    // Status: 'online', 'booked_web', 'blocked_manual'
+    let slotStates = {
+      '19:00': 'booked_web',
+      '20:00': 'booked_web',
+      '15:00': 'blocked_manual'
+    };
+
+    function renderAdminSlots() {
+      const container = document.getElementById('adminSlotsGrid');
+      container.innerHTML = slotHours.map(h => {
+        const state = slotStates[h] || 'online';
+        
+        let colorClass = 'border-emerald-500/40 bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-300';
+        let label = 'Tersedia';
+
+        if (state === 'booked_web') {
+          colorClass = 'border-rose-500/40 bg-rose-50/50 dark:bg-rose-950/20 text-rose-500';
+          label = 'Web Paid';
+        } else if (state === 'blocked_manual') {
+          colorClass = 'border-slate-500/40 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
+          label = 'Walk-in';
+        }
+
+        return `
+          <div onclick="toggleAdminSlot('${h}')" class="p-3 rounded-2xl border-2 text-center cursor-pointer transition-all hover:scale-105 ${colorClass}">
+            <div class="text-xs font-black">${h}</div>
+            <div class="text-[10px] font-bold mt-1 uppercase">${label}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleAdminSlot(hour) {
+      const current = slotStates[hour] || 'online';
+      if (current === 'online') {
+        slotStates[hour] = 'blocked_manual';
+      } else if (current === 'blocked_manual') {
+        delete slotStates[hour];
+      } else {
+        alert(`Slot jam ${hour} telah dibooking oleh pemain via website secara resmi.`);
+        return;
+      }
+      renderAdminSlots();
+    }
+
+    function openAddCourtModal() {
+      alert('Fitur Tambah Unit Lapangan: Anda dapat menambahkan nama lapangan baru, jenis permukaan (Sintetis/Vinyl), dan harga sewa.');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAdminSlots();
+    });
+  </script>
+</body>
+</html>

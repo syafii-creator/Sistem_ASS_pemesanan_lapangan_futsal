@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk & Daftar Akun - LapanganKita</title>
+  <meta name="description" content="Portal masuk dan pendaftaran akun pemain dan mitra pemilik lapangan futsal LapanganKita.">
+
+  <!-- Anti-Flicker Theme Init Script -->
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('lapangankita_theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-card {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .dark .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      border-color: rgba(51, 65, 85, 0.6);
+    }
+    html:not(.dark) .glass-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black transition-colors duration-300">
+
+  <!-- TOP BAR KECIL: LOGO & TOMBOL KEMBALI / THEME TOGGLE -->
+  <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+    <a href="01_landing_page.html" class="flex items-center gap-2.5 group">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+        <i data-lucide="trophy" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <span class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+          Lapangan<span class="text-emerald-500">Kita</span>
+        </span>
+        <span class="block text-[10px] text-slate-500 dark:text-slate-400 font-medium -mt-1 tracking-wide">PORTAL MASUK & DAFTAR</span>
+      </div>
+    </a>
+
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Dark/Light Mode Button -->
+      <button id="themeToggleBtn" onclick="handleThemeToggle()" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center gap-2 text-xs font-semibold transition-colors" title="Ubah Tema">
+        <i id="themeIcon" data-lucide="sun" class="w-4 h-4"></i>
+        <span class="hidden sm:inline" id="themeText">Terang</span>
+      </button>
+
+      <!-- Back to Landing Page -->
+      <a href="01_landing_page.html" class="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors flex items-center gap-1.5">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span class="hidden xs:inline">Ke Beranda</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN AUTH CONTAINER -->
+  <main class="w-full max-w-5xl mx-auto px-4 py-4 sm:py-8 flex-1 flex items-center justify-center">
+    <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+      <!-- LEFT COLUMN: PROMO & EDUKASI RAMAH (UNTUK PEMAIN & MITRA) -->
+      <div class="hidden lg:flex lg:col-span-5 flex-col justify-center space-y-6 pr-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-semibold w-fit">
+          <i data-lucide="shield-check" class="w-4 h-4"></i>
+          Akun Resmi Terverifikasi
+        </div>
+
+        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+          Satu Akun Untuk Semua Kebutuhan <span class="text-emerald-500">Futsal Kamu.</span>
+        </h1>
+
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+          Pemain bisa langsung cari lapangan & join mabar tanpa ribet. Pemilik venue bisa langsung pantau jadwal, bookingan masuk, dan omset real-time.
+        </p>
+
+        <!-- Keunggulan List -->
+        <div class="space-y-3.5 pt-2">
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="check" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-200">Untuk Pemain Futsal</h2>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Jadwal lapangan akurat, booking instan QRIS/VA, dan cari teman main via Open Slot.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="store" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-200">Untuk Mitra Pemilik Lapangan</h2>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Kelola jadwal otomatis tanpa bentrok, bebas repot catat manual di buku.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h2 class="text-xs font-bold text-slate-900 dark:text-slate-200">Proses Cepat & Mudah</h2>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400">Daftar cuma 1 menit, langsung aktif tanpa menunggu verifikasi berhari-hari.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner Testimoni Singkat -->
+        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-9 h-9 rounded-full object-cover">
+          <div>
+            <p class="font-medium text-slate-700 dark:text-slate-300">"Sistemnya simpel banget, booking lapangan jadi beres dalam hitungan detik!"</p>
+            <p class="text-[10px] text-slate-400 font-semibold mt-0.5">— Dimas Pratama, Kapten Tim AFC</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: MAIN FORM CARD -->
+      <div class="col-span-12 lg:col-span-7">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border shadow-xl relative overflow-hidden">
+
+          <!-- TAB SWITCHER: MASUK VS DAFTAR -->
+          <div class="flex p-1 bg-slate-200/80 dark:bg-slate-900/90 rounded-2xl mb-6">
+            <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm transition-all flex items-center justify-center gap-2">
+              <i data-lucide="log-in" class="w-4 h-4"></i>
+              Masuk Akun
+            </button>
+            <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center gap-2">
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+              Daftar Baru
+            </button>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- TAB 1: FORM MASUK (LOGIN)                      -->
+          <!-- ============================================== -->
+          <div id="loginFormSection" class="space-y-5">
+            <div>
+              <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">Selamat Datang Kembali! 👋</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Masukkan email/nomor HP terdaftar untuk melanjutkan.</p>
+            </div>
+
+            <!-- Quick Demo 1-Click Login (Sangat Membantu Evaluator & User Awam) -->
+            <div class="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/40">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                  Coba Akun Demo Cepat (1-Klik):
+                </span>
+                <span class="text-[10px] text-emerald-600 dark:text-emerald-400">Siap Pakai</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button type="button" onclick="fillDemo('player')" class="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-emerald-300/50 dark:border-emerald-700/50 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-600 text-slate-700 dark:text-slate-200 text-left transition-all group">
+                  <div class="text-[11px] font-bold flex items-center gap-1">
+                    <span>🏃 Pemain</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 group-hover:text-emerald-100 truncate">Budi Santoso</div>
+                </button>
+
+                <button type="button" onclick="fillDemo('tenant1')" class="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-emerald-300/50 dark:border-emerald-700/50 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-600 text-slate-700 dark:text-slate-200 text-left transition-all group">
+                  <div class="text-[11px] font-bold flex items-center gap-1">
+                    <span>🏟️ Mitra 1</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 group-hover:text-emerald-100 truncate">Champion (Bdg)</div>
+                </button>
+
+                <button type="button" onclick="fillDemo('tenant2')" class="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-emerald-300/50 dark:border-emerald-700/50 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-600 text-slate-700 dark:text-slate-200 text-left transition-all group">
+                  <div class="text-[11px] font-bold flex items-center gap-1">
+                    <span>🏟️ Mitra 2</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 group-hover:text-emerald-100 truncate">Garuda (Jkt)</div>
+                </button>
+
+                <button type="button" onclick="fillDemo('superadmin')" class="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-emerald-300/50 dark:border-emerald-700/50 hover:bg-emerald-500 hover:text-white dark:hover:bg-emerald-600 text-slate-700 dark:text-slate-200 text-left transition-all group">
+                  <div class="text-[11px] font-bold flex items-center gap-1">
+                    <span>👑 Super Admin</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 group-hover:text-emerald-100 truncate">Platform Master</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+              <div>
+                <label for="loginEmail" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email atau Nomor WhatsApp</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                  </div>
+                  <input type="text" id="loginEmail" required placeholder="contoh: budi@lapangankita.com / 081234567890" value="budi@lapangankita.com" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all placeholder:text-slate-400">
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="loginPassword" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Kata Sandi (Password)</label>
+                  <button type="button" onclick="showForgotPasswordModal()" class="text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline font-semibold">Lupa Kata Sandi?</button>
+                </div>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                  </div>
+                  <input type="password" id="loginPassword" required placeholder="Masukkan kata sandi akun" value="password123" class="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all placeholder:text-slate-400">
+                  <button type="button" onclick="togglePasswordVisibility('loginPassword', 'loginEyeIcon')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i id="loginEyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-1">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                  <input type="checkbox" id="rememberMe" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700">
+                  <span class="text-xs text-slate-600 dark:text-slate-400">Ingat sesi saya di perangkat ini</span>
+                </label>
+              </div>
+
+              <button type="submit" id="loginSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+                <span>Masuk Sekarang</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </form>
+
+            <div class="text-center pt-2">
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Belum punya akun? 
+                <button type="button" onclick="switchAuthTab('register')" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+                  Daftar di sini secara gratis
+                </button>
+              </p>
+            </div>
+          </div>
+
+
+          <!-- ============================================== -->
+          <!-- TAB 2: FORM DAFTAR BARU (REGISTER)            -->
+          <!-- ============================================== -->
+          <div id="registerFormSection" class="hidden space-y-5">
+            <div>
+              <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">Daftar Akun Baru 🚀</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pilih jenis akun yang sesuai dengan kebutuhan Anda:</p>
+            </div>
+
+            <!-- Role Selector Card yang Sangat Jelas dan Ramah Orang Awam -->
+            <div class="grid grid-cols-2 gap-3">
+              <label class="relative cursor-pointer">
+                <input type="radio" name="registerRole" value="player" checked onchange="handleRoleSelectionChange('player')" class="peer sr-only">
+                <div class="p-3.5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/50 dark:peer-checked:bg-emerald-950/20 bg-white/50 dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all text-left">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-2">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                  </div>
+                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Pemain Futsal</div>
+                  <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Cari lapangan, join mabar & booking slot</div>
+                </div>
+              </label>
+
+              <label class="relative cursor-pointer">
+                <input type="radio" name="registerRole" value="tenant" onchange="handleRoleSelectionChange('tenant')" class="peer sr-only">
+                <div class="p-3.5 rounded-2xl border-2 border-slate-200 dark:border-slate-700 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/50 dark:peer-checked:bg-emerald-950/20 bg-white/50 dark:bg-slate-900/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all text-left">
+                  <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-2">
+                    <i data-lucide="store" class="w-4 h-4"></i>
+                  </div>
+                  <div class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">Mitra Pemilik Venue</div>
+                  <div class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Pasang lapangan & kelola jadwal otomatis</div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Dynamic Registration Form -->
+            <form id="registerForm" onsubmit="handleRegisterSubmit(event)" class="space-y-3.5">
+              
+              <!-- FORM KHUSUS PEMAIN -->
+              <div id="playerFields" class="space-y-3.5">
+                <div>
+                  <label for="playerName" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap</label>
+                  <input type="text" id="playerName" placeholder="Nama Anda (contoh: Rendy Pangalila)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label for="playerPhone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp</label>
+                    <input type="tel" id="playerPhone" placeholder="081234567890" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                  </div>
+                  <div>
+                    <label for="playerPos" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Posisi Favorit</label>
+                    <select id="playerPos" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                      <option value="Flank / Winger">Flank / Sayap</option>
+                      <option value="Anchor / Bek">Anchor / Bertahan</option>
+                      <option value="Pivot / Penyerang">Pivot / Penyerang</option>
+                      <option value="Kiper">Kiper (Goalkeeper)</option>
+                      <option value="Bebas / All Around">Bebas / Fleksibel</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FORM KHUSUS PEMILIK LAPANGAN / MITRA VENUE -->
+              <div id="tenantFields" class="hidden space-y-3.5">
+                <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs flex items-start gap-2">
+                  <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5"></i>
+                  <span>Setelah daftar, Anda dapat langsung mengatur nama lapangan, tarif sewa per jam, dan mengaktifkan booking online.</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label for="tenantOwnerName" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Pemilik / Manajer</label>
+                    <input type="text" id="tenantOwnerName" placeholder="Contoh: Bpk. H. Rusdi" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                  </div>
+                  <div>
+                    <label for="tenantVenueName" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Tempat Lapangan</label>
+                    <input type="text" id="tenantVenueName" placeholder="Contoh: Rajawali Futsal Arena" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label for="tenantCity" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Kota / Kabupaten</label>
+                    <input type="text" id="tenantCity" placeholder="Contoh: Bandung" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                  </div>
+                  <div>
+                    <label for="tenantPhone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp Bisnis</label>
+                    <input type="tel" id="tenantPhone" placeholder="081388991122" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                  </div>
+                </div>
+              </div>
+
+              <!-- FIELD BERSAMA: EMAIL & PASSWORD -->
+              <div>
+                <label for="registerEmail" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Alamat Email</label>
+                <input type="email" id="registerEmail" required placeholder="nama@email.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+              </div>
+
+              <div>
+                <label for="registerPassword" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Kata Sandi (Minimal 6 Karakter)</label>
+                <div class="relative">
+                  <input type="password" id="registerPassword" required minlength="6" placeholder="Buat kata sandi akun" class="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+                  <button type="button" onclick="togglePasswordVisibility('registerPassword', 'regEyeIcon')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i id="regEyeIcon" data-lucide="eye" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Syarat & Ketentuan -->
+              <div class="pt-1">
+                <label class="flex items-start gap-2 cursor-pointer select-none">
+                  <input type="checkbox" id="termsAgree" required class="w-4 h-4 mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 dark:border-slate-700">
+                  <span class="text-[11px] text-slate-600 dark:text-slate-400 leading-tight">
+                    Saya menyetujui <a href="#" class="text-emerald-600 dark:text-emerald-400 underline">Ketentuan Layanan</a> dan <a href="#" class="text-emerald-600 dark:text-emerald-400 underline">Kebijakan Privasi</a> LapanganKita.
+                  </span>
+                </label>
+              </div>
+
+              <button type="submit" id="registerSubmitBtn" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-2 mt-2">
+                <span>Daftar Akun Sekarang</span>
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+              </button>
+            </form>
+
+            <div class="text-center pt-2">
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Sudah punya akun? 
+                <button type="button" onclick="switchAuthTab('login')" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">
+                  Masuk di sini
+                </button>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER MINIMALIS & RAMAH -->
+  <footer class="w-full py-4 text-center border-t border-slate-200 dark:border-slate-900 text-slate-500 dark:text-slate-400 text-xs">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>© 2026 LapanganKita. Solusi Ekosistem & Manajemen Lapangan Futsal Indonesia.</p>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="01_landing_page.html" class="hover:underline">Beranda</a>
+        <a href="#" onclick="alert('Hubungi CS WhatsApp: 0812-3456-7890'); return false;" class="hover:underline">Bantuan CS</a>
+        <a href="#" onclick="alert('Platform simulasi siap pakai.'); return false;" class="hover:underline">Panduan</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: LUPA KATA SANDI SIMULASI -->
+  <div id="forgotPasswordModal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+      <button onclick="hideForgotPasswordModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4">
+        <i data-lucide="key-round" class="w-6 h-6"></i>
+      </div>
+
+      <h3 class="text-base font-bold text-slate-900 dark:text-white">Reset Kata Sandi</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4 leading-relaxed">
+        Masukkan email atau nomor WhatsApp terdaftar. Kami akan mengirimkan tautan reset kata sandi ke kontak Anda.
+      </p>
+
+      <form onsubmit="handleForgotPasswordSubmit(event)" class="space-y-3">
+        <input type="text" id="forgotInput" required placeholder="Email atau 0812xxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs outline-none focus:ring-2 focus:ring-emerald-500">
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-md transition-all">
+          Kirim Link Reset Sandi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFIKASI -->
+  <div id="authToast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 max-w-sm w-full pointer-events-none">
+    <div id="toastCard" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border shadow-2xl flex items-center gap-3">
+      <div id="toastIconWrapper" class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0">
+        <i id="toastIcon" data-lucide="check" class="w-5 h-5"></i>
+      </div>
+      <div class="flex-1">
+        <h4 id="toastTitle" class="text-xs font-bold text-slate-900 dark:text-white">Notifikasi</h4>
+        <p id="toastMessage" class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Pesan deskripsi</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOAD ENGINE STATE & DATABASE -->
+  <script src="engine.js"></script>
+
+  <!-- AUTH PORTAL LOGIC SCRIPT -->
+  <script>
+    // Inisialisasi Icons
+    lucide.createIcons();
+
+    // Setup Tampilan Tema saat Load
+    function initThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (isDark) {
+        icon.setAttribute('data-lucide', 'sun');
+        text.innerText = 'Terang';
+      } else {
+        icon.setAttribute('data-lucide', 'moon');
+        text.innerText = 'Gelap';
+      }
+      lucide.createIcons();
+    }
+    initThemeUI();
+
+    // Deteksi Parameter URL (misal: ?mode=register&role=tenant)
+    function checkUrlParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mode = urlParams.get('mode');
+      const role = urlParams.get('role');
+
+      if (mode === 'register') {
+        switchAuthTab('register');
+        if (role === 'tenant') {
+          const tenantRadio = document.querySelector('input[name="registerRole"][value="tenant"]');
+          if (tenantRadio) {
+            tenantRadio.checked = true;
+            handleRoleSelectionChange('tenant');
+          }
+        }
+      }
+    }
+    checkUrlParams();
+
+    function handleThemeToggle() {
+      if (window.LapanganKitaTheme) {
+        window.LapanganKitaTheme.toggle();
+      } else {
+        document.documentElement.classList.toggle('dark');
+      }
+      initThemeUI();
+    }
+
+    // Tab Switcher Masuk vs Daftar
+    function switchAuthTab(tab) {
+      const loginSection = document.getElementById('loginFormSection');
+      const registerSection = document.getElementById('registerFormSection');
+      const tabLoginBtn = document.getElementById('tabLoginBtn');
+      const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+
+      if (tab === 'login') {
+        loginSection.classList.remove('hidden');
+        registerSection.classList.add('hidden');
+
+        tabLoginBtn.className = 'flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm transition-all flex items-center justify-center gap-2';
+        tabRegisterBtn.className = 'flex-1 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center gap-2';
+      } else {
+        loginSection.classList.add('hidden');
+        registerSection.classList.remove('hidden');
+
+        tabRegisterBtn.className = 'flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-900 dark:text-white bg-white dark:bg-slate-800 shadow-sm transition-all flex items-center justify-center gap-2';
+        tabLoginBtn.className = 'flex-1 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center gap-2';
+      }
+      lucide.createIcons();
+    }
+
+    // Role Switcher di Register (Pemain vs Mitra Venue)
+    function handleRoleSelectionChange(role) {
+      const playerFields = document.getElementById('playerFields');
+      const tenantFields = document.getElementById('tenantFields');
+
+      if (role === 'player') {
+        playerFields.classList.remove('hidden');
+        tenantFields.classList.add('hidden');
+      } else {
+        playerFields.classList.add('hidden');
+        tenantFields.classList.remove('hidden');
+      }
+      lucide.createIcons();
+    }
+
+    // Toggle Sembunyikan/Tampilkan Sandi
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    // Quick 1-Click Demo Login Fill
+    function fillDemo(role) {
+      const emailInput = document.getElementById('loginEmail');
+      const passInput = document.getElementById('loginPassword');
+
+      if (role === 'player') {
+        emailInput.value = 'budi@lapangankita.com';
+        passInput.value = 'password123';
+        showToast('success', 'Akun Pemain Dimuat', 'Budi Santoso (Pemain) siap masuk!');
+      } else if (role === 'tenant1' || role === 'tenant') {
+        emailInput.value = 'owner@championfutsal.com';
+        passInput.value = 'password123';
+        showToast('success', 'Akun Mitra 1 Dimuat', 'Haji Rusdi — Champion Futsal Bandung');
+      } else if (role === 'tenant2') {
+        emailInput.value = 'owner@garudafutsal.com';
+        passInput.value = 'password123';
+        showToast('success', 'Akun Mitra 2 Dimuat', 'Hendra Gunawan — Garuda Sport Jakarta');
+      } else if (role === 'superadmin') {
+        emailInput.value = 'superadmin@lapangankita.com';
+        passInput.value = 'adminsecret123';
+        showToast('success', 'Akun Super Admin Dimuat', 'Super Administrator siap masuk!');
+      }
+    }
+
+    // Toast Notification Utility
+    function showToast(type, title, message) {
+      const toast = document.getElementById('authToast');
+      const iconWrap = document.getElementById('toastIconWrapper');
+      const icon = document.getElementById('toastIcon');
+      const titleEl = document.getElementById('toastTitle');
+      const msgEl = document.getElementById('toastMessage');
+
+      titleEl.innerText = title;
+      msgEl.innerText = message;
+
+      if (type === 'success') {
+        iconWrap.className = 'w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0';
+        icon.setAttribute('data-lucide', 'check-circle-2');
+      } else {
+        iconWrap.className = 'w-9 h-9 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0';
+        icon.setAttribute('data-lucide', 'alert-circle');
+      }
+      lucide.createIcons();
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+    }
+
+    // Helper Navigasi ke Halaman Tujuan (Mendukung Master Shell iframe jika ada)
+    function navigateToPage(targetPage, role) {
+      // Jika berada di dalam Master Iframe Controller Shell
+      if (window.parent && window.parent !== window && typeof window.parent.switchPage === 'function') {
+        window.parent.switchPage(targetPage, role);
+      } else {
+        window.location.href = targetPage;
+      }
+    }
+
+    // Submit Handler Login
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value;
+
+      if (!window.LapanganKitaAuth) {
+        showToast('error', 'Gagal', 'Sistem engine belum siap.');
+        return;
+      }
+
+      const result = window.LapanganKitaAuth.login(email, pass);
+      if (result.success) {
+        showToast('success', 'Login Berhasil! 🎉', 'Mengalihkan Anda ke halaman yang sesuai...');
+        
+        setTimeout(() => {
+          if (result.user.role === 'player') {
+            // Pemain diarahkan ke Katalog Lapangan (Halaman 03)
+            navigateToPage('03_katalog_venue.html', 'player');
+          } else if (result.user.role === 'tenant') {
+            // Pemilik venue diarahkan ke Dashboard Mitra (Halaman 08)
+            navigateToPage('08_tenant_dashboard.html', 'tenant');
+          } else if (result.user.role === 'superadmin') {
+            // Super admin diarahkan ke Super Admin Dashboard (Halaman 13)
+            navigateToPage('13_super_admin_dashboard.html', 'superadmin');
+          } else {
+            navigateToPage('03_katalog_venue.html', 'player');
+          }
+        }, 1200);
+      } else {
+        showToast('error', 'Login Gagal', result.message || 'Periksa kembali data Anda.');
+      }
+    }
+
+    // Submit Handler Register
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const selectedRole = document.querySelector('input[name="registerRole"]:checked').value;
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+
+      let userData = {
+        email: email,
+        password: password,
+        role: selectedRole
+      };
+
+      if (selectedRole === 'player') {
+        const name = document.getElementById('playerName').value.trim() || 'Pemain Baru';
+        const phone = document.getElementById('playerPhone').value.trim() || '081200000000';
+        const pos = document.getElementById('playerPos').value;
+
+        userData.name = name;
+        userData.phone = phone;
+        userData.favoritePosition = pos;
+      } else {
+        const ownerName = document.getElementById('tenantOwnerName').value.trim() || 'Pemilik Lapangan';
+        const venueName = document.getElementById('tenantVenueName').value.trim() || 'Arena Futsal Baru';
+        const city = document.getElementById('tenantCity').value.trim() || 'Indonesia';
+        const phone = document.getElementById('tenantPhone').value.trim() || '081300000000';
+
+        userData.name = ownerName;
+        userData.venueName = venueName;
+        userData.city = city;
+        userData.phone = phone;
+      }
+
+      const res = window.LapanganKitaAuth.register(userData);
+      if (res.success) {
+        showToast('success', 'Pendaftaran Berhasil! 🚀', 'Akun berhasil dibuat. Selamat datang di LapanganKita!');
+        setTimeout(() => {
+          if (selectedRole === 'player') {
+            // Arahkan ke katalog lapangan untuk mulai booking
+            navigateToPage('03_katalog_venue.html', 'player');
+          } else {
+            // Arahkan mitra baru ke profil venue pertama (Halaman 09) atau Dashboard (Halaman 08)
+            navigateToPage('08_tenant_dashboard.html', 'tenant');
+          }
+        }, 1300);
+      } else {
+        showToast('error', 'Gagal Mendaftar', res.message);
+      }
+    }
+
+    // Modal Lupa Password
+    function showForgotPasswordModal() {
+      const modal = document.getElementById('forgotPasswordModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function hideForgotPasswordModal() {
+      const modal = document.getElementById('forgotPasswordModal');
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+
+    function handleForgotPasswordSubmit(e) {
+      e.preventDefault();
+      hideForgotPasswordModal();
+      showToast('success', 'Tautan Terkirim! 📩', 'Instruksi reset kata sandi telah dikirim ke kontak Anda.');
+    }
+  </script>
+</body>
+</html>

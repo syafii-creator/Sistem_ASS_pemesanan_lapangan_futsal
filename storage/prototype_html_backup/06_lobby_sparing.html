@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lobby Sparing Antar Tim Futsal - LapanganKita</title>
+  <meta name="description" content="Temukan lawan tanding futsal seimbang, atur jadwal sparing antar klub, dan sepakati ketentuan patungan sewa lapangan secara transparan.">
+
+  <!-- Anti-Flicker Theme Init Script -->
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem('lapangankita_theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+              950: '#022c22',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-nav {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .dark .glass-nav {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(30, 41, 59, 0.8);
+    }
+    html:not(.dark) .glass-nav {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-black transition-colors duration-300">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 glass-nav transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="01_landing_page.html" class="flex items-center gap-2.5 group shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+          <i data-lucide="trophy" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1">
+            Lapangan<span class="text-emerald-500">Kita</span>
+          </span>
+          <span class="hidden sm:block text-[10px] text-slate-400 font-semibold -mt-1 tracking-wider uppercase">LOBBY SPARING</span>
+        </div>
+      </a>
+
+      <!-- Menu Navigasi Tengah -->
+      <nav class="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+        <a href="01_landing_page.html" class="hover:text-emerald-500 transition-colors">Beranda</a>
+        <a href="03_katalog_venue.html" class="hover:text-emerald-500 transition-colors">Katalog Venue</a>
+        <a href="05_open_slot_lobby.html" class="hover:text-emerald-500 transition-colors">Open Slot (Mabar)</a>
+        <a href="06_lobby_sparing.html" class="text-emerald-500 font-bold border-b-2 border-emerald-500 pb-0.5">Lobby Sparing</a>
+      </nav>
+
+      <!-- Aksi Kanan -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <button onclick="handleThemeToggle()" id="themeToggleBtn" class="p-2 sm:px-3 sm:py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center gap-1.5 text-xs font-semibold transition-colors">
+          <i id="themeIcon" data-lucide="sun" class="w-4 h-4 text-amber-400"></i>
+          <span class="hidden lg:inline" id="themeText">Terang</span>
+        </button>
+
+        <button onclick="openCreateSparingModal()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5">
+          <i data-lucide="swords" class="w-4 h-4"></i>
+          <span>Buat Tantangan</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="bg-gradient-to-b from-emerald-500/10 via-slate-100/30 dark:from-emerald-950/20 dark:via-slate-950 border-b border-slate-200 dark:border-slate-800/80 pt-8 pb-6 px-4">
+    <div class="max-w-7xl mx-auto space-y-4">
+      
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold mb-2">
+            <i data-lucide="swords" class="w-3.5 h-3.5"></i>
+            <span>Arena Pertandingan Antar Klub</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            Lobby Tantang <span class="text-emerald-500">Sparing Futsal</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+            Cari tim lawan tanding yang selevel untuk uji coba strategi. Pilih sistem biaya sewa: <strong>Bagi Rata (50:50)</strong> atau <strong>Kalah Bayar Penuh</strong> untuk adu gengsi yang sportif!
+          </p>
+        </div>
+
+        <!-- Ringkasan Info -->
+        <div class="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm shrink-0">
+          <div class="text-center px-3">
+            <div class="text-lg font-black text-emerald-500" id="statSparingCount">5</div>
+            <div class="text-[10px] text-slate-400 font-semibold">Tantangan Terbuka</div>
+          </div>
+          <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+          <div class="text-center px-3">
+            <div class="text-lg font-black text-slate-900 dark:text-white">100%</div>
+            <div class="text-[10px] text-slate-400 font-semibold">Fair Play Terverifikasi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Kategori -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold pt-2">
+        <span class="text-slate-400 text-[11px] shrink-0 font-medium mr-1">Filter Level:</span>
+        <button onclick="setSparingFilter('all')" class="sparing-pill px-3 py-1.5 rounded-xl bg-emerald-600 text-white shrink-0 font-bold shadow-sm" data-filter="all">Semua Level</button>
+        <button onclick="setSparingFilter('Amatir')" class="sparing-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0" data-filter="Amatir">Amatir / Fun Friendly</button>
+        <button onclick="setSparingFilter('Menengah')" class="sparing-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0" data-filter="Menengah">Menengah (Club Rutin)</button>
+        <button onclick="setSparingFilter('Semi-Pro')" class="sparing-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0" data-filter="Semi-Pro">Semi-Pro / Turnamen</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LIST KARTU SPARING -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
+    <div id="sparingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Di-render dinamis oleh JS -->
+    </div>
+  </main>
+
+  <!-- MODAL BUAT TANTANGAN SPARING -->
+  <div id="createSparingModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-lg w-full rounded-3xl p-6 sm:p-7 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      
+      <button onclick="closeCreateSparingModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+          <i data-lucide="swords" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">Buat Tantangan Sparing Baru</h3>
+          <p class="text-xs text-slate-500">Pasang jadwal tanding tim futsal Anda di lobby.</p>
+        </div>
+      </div>
+
+      <form onsubmit="handleCreateSparingSubmit(event)" class="space-y-3.5 pt-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Tim Anda</label>
+            <input type="text" id="sparingTeamName" required placeholder="Contoh: Garuda Muda FC" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Level Tim</label>
+            <select id="sparingLevel" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Amatir">Amatir / Fun Friendly</option>
+              <option value="Menengah">Menengah (Club Rutin)</option>
+              <option value="Semi-Pro">Semi-Pro / Tim Turnamen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Venue Pertandingan</label>
+            <select id="sparingVenue" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Champion Futsal Arena (Bandung)">Champion Futsal Arena (Bandung)</option>
+              <option value="Garuda Sport Center (Jakarta)">Garuda Sport Center (Jakarta)</option>
+              <option value="Siliwangi Futsal Stadium (Surabaya)">Siliwangi Futsal Stadium (Surabaya)</option>
+              <option value="Patriot Futsal Center (Bekasi)">Patriot Futsal Center (Bekasi)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Ketentuan Sewa</label>
+            <select id="sparingRule" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Bagi Rata (50:50)">Bagi Rata (50:50)</option>
+              <option value="Kalah Bayar Penuh">Kalah Bayar Lapangan Penuh</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Main</label>
+            <input type="date" id="sparingDate" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Jam Tanding</label>
+            <input type="text" id="sparingTime" placeholder="20:00 - 22:00" value="20:00 - 22:00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">No. WhatsApp Kapten Tim</label>
+          <input type="tel" id="sparingPhone" required placeholder="081234567890" value="081234567890" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-xs sm:text-sm outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 mt-2">
+          <span>Pasang Tantangan Sparing</span>
+          <i data-lucide="check" class="w-4 h-4"></i>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL TERIMA TANTANGAN -->
+  <div id="acceptSparingModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-md w-full rounded-3xl p-6 shadow-2xl relative space-y-4">
+      
+      <button onclick="closeAcceptModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div>
+        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 uppercase">Tantangan Diterima</span>
+        <h3 class="text-base font-extrabold text-slate-900 dark:text-white mt-2" id="modalAcceptTeam">Lawan: Garuda Muda FC</h3>
+        <p class="text-xs text-slate-500 mt-0.5" id="modalAcceptVenue">Venue & Jadwal</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-2 text-xs">
+        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+          <span>Ketentuan Biaya:</span>
+          <strong class="text-emerald-500 font-bold" id="modalAcceptRule">Bagi Rata (50:50)</strong>
+        </div>
+        <div class="flex justify-between text-slate-600 dark:text-slate-400">
+          <span>Kapten Penantang:</span>
+          <span class="font-semibold text-slate-800 dark:text-slate-200" id="modalAcceptCaptain">Dimas (0812-xxxx)</span>
+        </div>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <button onclick="confirmAcceptSparing()" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2">
+          <span>Hubungi Kapten Lawan via WhatsApp</span>
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+        </button>
+        <button onclick="closeAcceptModal()" class="w-full py-2 text-xs text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="w-full py-6 text-center border-t border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400 text-xs mt-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© 2026 LapanganKita. Platform Reservasi Lapangan Futsal & Ekosistem Olahraga.</p>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="01_landing_page.html" class="hover:underline">Beranda</a>
+        <a href="03_katalog_venue.html" class="hover:underline">Katalog</a>
+        <a href="05_open_slot_lobby.html" class="hover:underline">Open Slot</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LOAD ENGINE -->
+  <script src="engine.js"></script>
+
+  <!-- SPARING LOGIC SCRIPT -->
+  <script>
+    lucide.createIcons();
+
+    const SPARING_KEY = 'lapangankita_sparings';
+
+    const defaultSparings = [
+      {
+        id: 'sp-01',
+        teamName: 'Rajawali FC Bandung',
+        captainName: 'Kapten Iqbal',
+        phone: '0812-3456-7890',
+        venueName: 'Champion Futsal Arena (Bandung)',
+        date: '2026-10-15',
+        time: '19:00 - 21:00',
+        level: 'Menengah',
+        rule: 'Bagi Rata (50:50)',
+        stats: '14 Match • Win Rate 70%',
+        status: 'OPEN'
+      },
+      {
+        id: 'sp-02',
+        teamName: 'Cilandak Tiger United',
+        captainName: 'Bagas Pratama',
+        phone: '0813-8899-1122',
+        venueName: 'Garuda Sport Center (Jakarta)',
+        date: '2026-10-16',
+        time: '20:00 - 22:00',
+        level: 'Semi-Pro',
+        rule: 'Kalah Bayar Penuh',
+        stats: '22 Match • Win Rate 85%',
+        status: 'OPEN'
+      },
+      {
+        id: 'sp-03',
+        teamName: 'Surabaya Fun Futsal',
+        captainName: 'Dimas Kurnia',
+        phone: '0857-1122-3344',
+        venueName: 'Siliwangi Futsal Stadium (Surabaya)',
+        date: '2026-10-17',
+        time: '18:00 - 20:00',
+        level: 'Amatir',
+        rule: 'Bagi Rata (50:50)',
+        stats: '8 Match • Friendly Play',
+        status: 'OPEN'
+      },
+      {
+        id: 'sp-04',
+        teamName: 'Bekasi Patriot Squad',
+        captainName: 'Ferry Ardiansyah',
+        phone: '0811-9988-7766',
+        venueName: 'Patriot Futsal Center (Bekasi)',
+        date: '2026-10-18',
+        time: '20:00 - 22:00',
+        level: 'Menengah',
+        rule: 'Bagi Rata (50:50)',
+        stats: '10 Match • Win Rate 60%',
+        status: 'OPEN'
+      }
+    ];
+
+    let currentSparingFilter = 'all';
+    let targetSparing = null;
+
+    function getSparings() {
+      const stored = localStorage.getItem(SPARING_KEY);
+      if (!stored) {
+        localStorage.setItem(SPARING_KEY, JSON.stringify(defaultSparings));
+        return defaultSparings;
+      }
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        return defaultSparings;
+      }
+    }
+
+    function saveSparings(data) {
+      localStorage.setItem(SPARING_KEY, JSON.stringify(data));
+    }
+
+    // Theme Management
+    function initThemeUI() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (isDark) {
+        icon.setAttribute('data-lucide', 'sun');
+        text.innerText = 'Terang';
+      } else {
+        icon.setAttribute('data-lucide', 'moon');
+        text.innerText = 'Gelap';
+      }
+      lucide.createIcons();
+    }
+    initThemeUI();
+
+    function handleThemeToggle() {
+      if (window.LapanganKitaTheme) {
+        window.LapanganKitaTheme.toggle();
+      } else {
+        document.documentElement.classList.toggle('dark');
+      }
+      initThemeUI();
+    }
+
+    function setSparingFilter(level) {
+      currentSparingFilter = level;
+      document.querySelectorAll('.sparing-pill').forEach(btn => {
+        if (btn.getAttribute('data-filter') === level) {
+          btn.className = 'sparing-pill px-3 py-1.5 rounded-xl bg-emerald-600 text-white shrink-0 font-bold shadow-sm';
+        } else {
+          btn.className = 'sparing-pill px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-emerald-500 shrink-0';
+        }
+      });
+      renderSparings();
+    }
+
+    function renderSparings() {
+      const list = getSparings();
+      let filtered = [...list];
+
+      if (currentSparingFilter !== 'all') {
+        filtered = filtered.filter(s => s.level === currentSparingFilter);
+      }
+
+      document.getElementById('statSparingCount').innerText = list.filter(s => s.status === 'OPEN').length;
+
+      const container = document.getElementById('sparingGrid');
+      container.innerHTML = filtered.map(s => {
+        const isMatched = s.status === 'MATCHED';
+
+        return `
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between group">
+            <div class="space-y-4">
+              
+              <!-- Badges Header -->
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold ${s.level === 'Amatir' ? 'bg-emerald-500/10 text-emerald-500' : (s.level === 'Menengah' ? 'bg-amber-500/10 text-amber-500' : 'bg-rose-500/10 text-rose-500')}">
+                  Tier: ${s.level}
+                </span>
+
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isMatched ? 'bg-slate-100 dark:bg-slate-800 text-slate-400' : 'bg-emerald-500/10 text-emerald-500'}">
+                  ${isMatched ? 'Terkonfirmasi Lawan' : 'Mencari Lawan'}
+                </span>
+              </div>
+
+              <!-- Identitas Tim Penantang -->
+              <div class="flex items-start gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 text-white flex items-center justify-center font-black text-lg border border-slate-200 dark:border-slate-700 shrink-0 shadow-sm">
+                  ${s.teamName.charAt(0)}
+                </div>
+                <div>
+                  <h3 class="font-bold text-base text-slate-900 dark:text-white leading-tight group-hover:text-emerald-500 transition-colors">${s.teamName}</h3>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">${s.stats}</p>
+                </div>
+              </div>
+
+              <!-- Info Pertandingan -->
+              <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+                <div class="flex items-center gap-2">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i>
+                  <span class="truncate">${s.venueName}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+                  <span>${s.date} • <strong>${s.time}</strong></span>
+                </div>
+                <div class="flex items-center gap-2 pt-1 border-t border-slate-200 dark:border-slate-700/60 text-[11px]">
+                  <i data-lucide="scale" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+                  <span>Ketentuan: <strong class="text-slate-900 dark:text-white">${s.rule}</strong></span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Footer Card -->
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mt-4 flex items-center justify-between gap-3">
+              <div class="text-[11px] text-slate-500">
+                Kapten: <strong class="text-slate-800 dark:text-slate-200">${s.captainName}</strong>
+              </div>
+
+              ${isMatched ? `
+                <button disabled class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-400 font-bold text-xs cursor-not-allowed">
+                  Sudah Terisi
+                </button>
+              ` : `
+                <button onclick="openAcceptModal('${s.id}')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5">
+                  <i data-lucide="swords" class="w-3.5 h-3.5"></i>
+                  <span>Terima Tantangan</span>
+                </button>
+              `}
+            </div>
+
+          </div>
+        `;
+      }).join('');
+
+      lucide.createIcons();
+    }
+
+    // Modal Actions
+    function openCreateSparingModal() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('sparingDate').value = today;
+      document.getElementById('createSparingModal').classList.remove('hidden');
+      document.getElementById('createSparingModal').classList.add('flex');
+    }
+
+    function closeCreateSparingModal() {
+      document.getElementById('createSparingModal').classList.add('hidden');
+      document.getElementById('createSparingModal').classList.remove('flex');
+    }
+
+    function handleCreateSparingSubmit(e) {
+      e.preventDefault();
+      const team = document.getElementById('sparingTeamName').value;
+      const level = document.getElementById('sparingLevel').value;
+      const venue = document.getElementById('sparingVenue').value;
+      const rule = document.getElementById('sparingRule').value;
+      const date = document.getElementById('sparingDate').value;
+      const time = document.getElementById('sparingTime').value;
+      const phone = document.getElementById('sparingPhone').value;
+
+      const user = window.LapanganKitaAuth ? window.LapanganKitaAuth.getUser() : null;
+      const capName = user ? user.name : 'Kapten Baru';
+
+      const newSparing = {
+        id: 'sp-' + Date.now(),
+        teamName: team,
+        captainName: capName,
+        phone,
+        venueName: venue,
+        date,
+        time,
+        level,
+        rule,
+        stats: 'Tim Penantang Baru • Siap Main',
+        status: 'OPEN'
+      };
+
+      const list = getSparings();
+      list.unshift(newSparing);
+      saveSparings(list);
+
+      closeCreateSparingModal();
+      renderSparings();
+      alert(`⚔️ Tantangan dari tim "${team}" berhasil diterbitkan di Lobby Sparing!`);
+    }
+
+    function openAcceptModal(sparingId) {
+      const list = getSparings();
+      targetSparing = list.find(s => s.id === sparingId);
+      if (!targetSparing) return;
+
+      document.getElementById('modalAcceptTeam').innerText = `Lawan: ${targetSparing.teamName}`;
+      document.getElementById('modalAcceptVenue').innerText = `${targetSparing.venueName} • ${targetSparing.date} (${targetSparing.time})`;
+      document.getElementById('modalAcceptRule').innerText = targetSparing.rule;
+      document.getElementById('modalAcceptCaptain').innerText = `${targetSparing.captainName} (${targetSparing.phone})`;
+
+      document.getElementById('acceptSparingModal').classList.remove('hidden');
+      document.getElementById('acceptSparingModal').classList.add('flex');
+    }
+
+    function closeAcceptModal() {
+      document.getElementById('acceptSparingModal').classList.add('hidden');
+      document.getElementById('acceptSparingModal').classList.remove('flex');
+    }
+
+    function confirmAcceptSparing() {
+      if (!targetSparing) return;
+      const cleanPhone = (targetSparing.phone || '081234567890').replace(/[^0-9]/g, '');
+      const waMsg = encodeURIComponent(`Halo ${targetSparing.captainName}, kami dari tim tertarik untuk menerima tantangan sparing futsal di ${targetSparing.venueName} (${targetSparing.date} jam ${targetSparing.time}) dengan ketentuan ${targetSparing.rule}. Apakah jadwalnya masih siap?`);
+      
+      // Update status to matched
+      const list = getSparings();
+      const item = list.find(s => s.id === targetSparing.id);
+      if (item) item.status = 'MATCHED';
+      saveSparings(list);
+
+      closeAcceptModal();
+      renderSparings();
+
+      window.open(`https://wa.me/${cleanPhone}?text=${waMsg}`, '_blank');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSparings();
+    });
+  </script>
+</body>
+</html>
